@@ -21,23 +21,23 @@ router.get("/" ,async (req,res)=>{
 )
 
 async function getUnprotectedPost (skip=0,take=15) {
-    const posts =  await prisma.post.findMany({
-        skip,
-        take,
-        include: {
-          user: {
-            select: {
-              profileImage: true,
-              username: true
-            }
+  const posts =  await prisma.post.findMany({
+      skip,
+      take,
+      include: {
+        user: {
+          select: {
+            profileImage: true,
+            username: true
           }
-        },  
-        orderBy: {
-          createdAt: 'desc', // Sorting baby 
-        },
-      });
-      return posts.map((post) => ({
-        ...post,
-      }))
-  }
+        }
+      },  
+      orderBy: {
+        createdAt: 'desc', // Sorting baby 
+      },
+    });
+    return posts.map((post) => ({
+      ...post,
+    }))
+}
 export default router

@@ -9,7 +9,7 @@ import {checkForAuthentication} from "../middlewares/auth.js"
 const router = Router()
 
 router.use("/v1/user" , userRoutes);
-router.use("/v1/posts" ,checkForAuthentication, postRoutes);
+router.use("/v1/post" ,checkForAuthentication, postRoutes);
 router.use("/v1/feeds" , feedRoutes);
 
 

@@ -18,7 +18,12 @@ export async function getPosts (userId,skip=0,take=15) {
         skip,
         take,
         include: {
-          user: true,
+          user: {
+            select: {
+              profileImage: true,
+              username: true
+            }
+          },
           likes: {
             where: {
               userId
@@ -38,10 +43,14 @@ export async function getPosts (userId,skip=0,take=15) {
           createdAt: 'desc', // Sorting baby 
         },
       });
-      return posts.map((post) => ({
-        ...post,
-        isLiked: post.likes.length > 0
-      }))
+      return posts.map((post) => {
+        const { likes, ...rest } = post; // Destructure `likes` and keep the rest of the post data
+        return {
+          ...rest,
+          isLiked: likes.length > 0, // Add `isLiked` flag
+        };
+      });
+
 }
 
 

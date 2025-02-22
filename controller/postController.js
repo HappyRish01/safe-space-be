@@ -2,8 +2,8 @@ import { createComment, createPost, getComments, getPosts, likeDislikeComment, l
 
 
 export async function createPostController(req,res) {
-    const {content,caption} = req.body
-    const userId = req.user.id
+    const {content,caption} = req.body;
+    const userId = req.user.id;
 
     try {
         const post = await createPost(userId,content,caption)
@@ -25,7 +25,6 @@ export async function getPostsController (req, res) {
 
     const userId = req.user.id;
     const {skip,take} = req.body
-    console.log(userId)
     try {
         const posts = await getPosts(userId,skip,take)
         return res.status(200).json({
