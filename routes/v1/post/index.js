@@ -48,7 +48,8 @@ router.get("/:id", async (req, res) => {
 router.post("/like", likeDislikePostController);
 
 router.post("/comment", createCommentController);
-router.get("/comments", getCommentController);
+
+router.get("/comment", getCommentController);
 router.post("/like-comment", likeDislikeCommentController);
 
 export default router;
