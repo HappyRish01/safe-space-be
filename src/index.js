@@ -19,7 +19,7 @@ app.get("/", (req,res) => {
 })
 
 // Routes file
-import routes from './routes/index.js'
+import routes from '../routes/index.js'
 app.use("/api", routes)
 //http:localhost:8080/user
 
