@@ -19,4 +19,49 @@ model User {
   password String 
   profileImage String @default("https://i.ibb.co/QFf9SC8/img-avatar.png") 
   createdAt DateTime @default(now())
+  posts Post[]
+  comments Comment[]
+  postLikes PostLike[]
+  commentLikes CommentLike[]
+}
+
+model Post {
+  id         String    @id @default(uuid())
+  content    String?
+  caption    String?
+  userId     String
+  user       User @relation(fields: [userId] , references: [id])
+  likesCount Int       @default(0)
+  likes      PostLike[]
+  comments   Comment[]
+  createdAt  DateTime  @default(now())
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  comment   String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  likesCount Int @default(0)
+  likes     CommentLike[]
+}
+
+model PostLike {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  postId    String
+  post      Post    @relation(fields: [postId], references: [id])
+  @@unique([userId, postId])
+}
+
+model CommentLike {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  commentId String
+  Comment   Comment @relation(fields: [commentId], references: [id])
+  @@unique([userId, commentId])
 }

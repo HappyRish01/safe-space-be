@@ -35,6 +35,7 @@ export async function handleUserSignupController(req, res) {
         password: hashedPassword,
       },
     });
+
     const token = setUser(user);
 
     res.status(201).json({token, message: "User succesfully registered" });
@@ -48,7 +49,6 @@ export async function handleUserSignupController(req, res) {
 
 export async function handleUserLoginController(req, res) {
   const { username, password } = req.body;
-
   //validate user like password length and any other thing
   try {
     const user = await prisma.user.findUnique({

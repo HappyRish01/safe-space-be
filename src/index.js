@@ -23,8 +23,6 @@ import routes from '../routes/index.js'
 app.use("/api", routes)
 //http:localhost:8080/user
 
-
-
 app.listen(PORT, ()=>{
     console.log(`Server started at port ${PORT}`);
 });

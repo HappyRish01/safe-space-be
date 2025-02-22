@@ -16,10 +16,10 @@ export function checkForAuthentication(req, res, next) {
     return res.status(401).json({message: 'Invalid token format'})
   }
   
+  
   try {
     const decode = getUser(token);
     if(decode === null){
-     
       return res.status(400).json({message: "Invalid token"})      
     }
 
