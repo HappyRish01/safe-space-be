@@ -3,10 +3,10 @@ import { createCommentController, createPostController, getCommentController, ge
 
 const router = Router()
 
+router.get("/", getPostsController)
 
 router.get("/post", getPostsController)
 router.post("/post",createPostController)
-router.get("/", getPostsController)
 router.post("/like-post", likeDislikePostController)
 router.post("/comment",createCommentController)
 router.get("/comments", getCommentController)
