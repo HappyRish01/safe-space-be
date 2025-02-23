@@ -10,8 +10,8 @@ import {
 
 const router = Router();
 
-router.post("/", createPostController);
-router.get("/", getPostsController);
+router.post("/create", createPostController);
+router.get("/posts", getPostsController);
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -45,11 +45,12 @@ router.get("/:id", async (req, res) => {
 });
 
 
-router.post("/like", likeDislikePostController);
+router.post("/like-post", likeDislikePostController);
 
 router.post("/comment", createCommentController);
 
-router.get("/comment", getCommentController);
+router.get("/comments", getCommentController);
+
 router.post("/like-comment", likeDislikeCommentController);
 
 export default router;
