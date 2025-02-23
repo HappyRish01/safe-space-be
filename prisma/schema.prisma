@@ -34,8 +34,16 @@ model Post {
   likesCount Int       @default(0)
   likes      PostLike[]
   comments   Comment[]
+  communityId String?
+  community  Community? @relation(fields: [communityId], references: [id])
   createdAt  DateTime  @default(now())
   @@unique([content, caption, userId])
+}
+
+model Community {
+  id        String   @id @default(uuid())
+  name      String
+  posts     Post[]
 }
 
 model Comment {
