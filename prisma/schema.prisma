@@ -19,6 +19,7 @@ model User {
   password String 
   profileImage String @default("https://i.ibb.co/QFf9SC8/img-avatar.png") 
   createdAt DateTime @default(now())
+  communities Community[] @relation("CommunityMembers")
   posts Post[]
   comments Comment[]
   postLikes PostLike[]
@@ -44,6 +45,7 @@ model Community {
   id        String   @id @default(uuid())
   name      String
   posts     Post[]
+  members   User[] @relation("CommunityMembers")
 }
 
 model Comment {
