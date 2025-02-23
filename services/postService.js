@@ -1,11 +1,12 @@
 import {prisma} from "../libs/prisma.js";
 
-export async function createPost (userId,content,caption) {
+export async function createPost (userId,content,caption,communityId) {
     return await prisma.post.create({
         data: {
             content,
             userId,
-            caption
+            caption,
+            communityId
         },
         // include: {
         //   user: true  if u ever need user details at the time of creation lakshay
@@ -36,6 +37,11 @@ export async function getPosts (userId,skip=0,take=15) {
             include: {
               user: true,
               likes: true
+            }
+          },
+          community: {
+            select: {
+              name: true
             }
           }
         },
