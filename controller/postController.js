@@ -2,11 +2,50 @@ import { createComment, createPost, getComments, getPosts, likeDislikeComment, l
 
 
 export async function createPostController(req,res) {
-    const {content,caption} = req.body;
+    const {communityId,content,caption} = req.body;
     const userId = req.user.id;
+	if (caption){
 
+
+try {
+      const response= await fetch('BACKEND_URL', {
+        method:"POST",
+        headers:{
+          "Content-Type": "application/json", 
+        },
+        body:JSON.stringify({
+
+          msg:caption,
+
+        })});
+      const data=await response.json();
+
+      if (response.ok){
+        
+	if (data.toxicity){
+	return res.status(500).json({
+            message: "Please use Kinder Words"
+        })
+	
+	}
+      }else{
+        throw new Error('some Error Occured');
+      }
+      
+    } catch (e) {
+	return res.status(500).json({
+            message: "some Error Occurred"
+        })
+	
+    }
+
+
+
+
+}
+    
     try {
-        const post = await createPost(userId,content,caption)
+        const post = await createPost(userId,content,caption,communityId)
         return res.status(201).json({
             message: "Post created successfully",
             post,
@@ -19,7 +58,6 @@ export async function createPostController(req,res) {
         })
     }
 }
-
 
 export async function getPostsController (req, res) {
 
@@ -36,7 +74,6 @@ export async function getPostsController (req, res) {
         })
     }
 }
-
 
 export async function likeDislikePostController(req,res) {
 
