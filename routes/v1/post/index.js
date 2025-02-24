@@ -72,7 +72,7 @@ router.post("/like-post", likeDislikePostController);
 
 router.post("/comment", createCommentController);
 
-router.get("/comments", getCommentController);
+router.post("/comments", getCommentController);
 
 router.post("/like-comment", likeDislikeCommentController);
 
