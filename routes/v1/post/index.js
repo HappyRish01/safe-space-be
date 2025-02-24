@@ -11,6 +11,18 @@ import {
 const router = Router();
 
 router.post("/create", createPostController);
+router.delete("/delete", async (req, res) => {
+  const { id } = req.body;
+  try {
+    await prisma.post.delete({
+      where: { id },
+    });
+    return res.status(200).json({ message: "Post deleted" });
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong in deleting post" });
+  }
+});
+
 router.get("/posts", getPostsController);
 
 router.get("/:id", async (req, res) => {

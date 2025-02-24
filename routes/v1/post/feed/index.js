@@ -38,6 +38,7 @@ async function getUnprotectedPost (skip=0,take=15) {
     });
     return posts.map((post) => ({
       ...post,
+      isLiked: false,
     }))
 }
 export default router
