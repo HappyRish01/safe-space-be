@@ -66,7 +66,9 @@ export async function getPostsController (req, res) {
         })
     }catch(e){
         return res.status(500).json({
-            message: "Failed to fetch posts why i dont know"
+            message: "Failed to fetch posts why i dont know",
+            err:e,
+            error: e.message
         })
     }
 }
