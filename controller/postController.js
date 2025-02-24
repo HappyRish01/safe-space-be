@@ -111,7 +111,7 @@ export async function createCommentController(req,res) {
 
 export async function getCommentController(req,res) {
     const userId = req.user.id
-    const {postId , skip , take} = req.body
+    const {postId , skip , take} = req.query;
 
     try {
         const comments = await getComments(userId,postId,skip,take)
