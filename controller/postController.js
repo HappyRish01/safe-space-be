@@ -97,9 +97,9 @@ export async function createCommentController(req,res) {
     const userId = req.user.id
 
     try {
-        const post = await createComment(userId,postId,content)
+        const comment = await createComment(userId,postId,content)
         res.status(200).json({
-            post
+            comment
         })
     } catch (error) {
         res.status(500).json({

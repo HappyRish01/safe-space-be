@@ -1,81 +1,77 @@
-import {prisma} from "../libs/prisma.js";
+import { prisma } from "../libs/prisma.js";
 
-export async function createPost (userId,content,caption,communityId) {
-    return await prisma.post.create({
-        data: {
-            content,
-            userId,
-            caption,
-            communityId
-        },
-        // include: {
-        //   user: true  if u ever need user details at the time of creation lakshay
-        // }
-    })
+export async function createPost(userId, content, caption, communityId) {
+  return await prisma.post.create({
+    data: {
+      content,
+      userId,
+      caption,
+      communityId,
+    },
+    // include: {
+    //   user: true  if u ever need user details at the time of creation lakshay
+    // }
+  });
 }
 
-export async function getPosts (userId,skip=0,take=15) {
-    const posts =  await prisma.post.findMany({
-        skip,
-        take,
+export async function getPosts(userId, skip = 0, take = 15) {
+  const posts = await prisma.post.findMany({
+    skip,
+    take,
+    include: {
+      user: {
+        select: {
+          profileImage: true,
+          username: true,
+        },
+      },
+      likes: {
+        where: {
+          userId,
+        },
+        select: {
+          userId: true,
+        },
+      },
+      comments: {
         include: {
-          user: {
-            select: {
-              profileImage: true,
-              username: true
-            }
-          },
-          likes: {
-            where: {
-              userId
-            },
-            select: {
-              userId: true
-            }
-          },
-          comments: {
-            include: {
-              user: true,
-              likes: true
-            }
-          },
-          community: {
-            select: {
-              name: true
-            }
-          }
+          user: true,
+          likes: true,
         },
-        orderBy: {
-          createdAt: 'desc', // Sorting baby 
+      },
+      community: {
+        select: {
+          name: true,
         },
-      });
-      return posts.map((post) => {
-        const { likes, ...rest } = post; // Destructure `likes` and keep the rest of the post data
-        return {
-          ...rest,
-          isLiked: likes.length > 0, // Add `isLiked` flag
-        };
-      });
-
+      },
+    },
+    orderBy: {
+      createdAt: "desc", // Sorting baby
+    },
+  });
+  return posts.map((post) => {
+    const { likes, ...rest } = post; // Destructure `likes` and keep the rest of the post data
+    return {
+      ...rest,
+      isLiked: likes.length > 0, // Add `isLiked` flag
+    };
+  });
 }
 
-
-
-
-export async function likeDislikePost (userId,postId) {
+export async function likeDislikePost(userId, postId) {
   const like = await prisma.postLike.findFirst({
     where: {
       userId,
-      postId
-    }
-  })
+      postId,
+    },
+  });
 
-  if(like) {
+  if (like) {
     await prisma.postLike.delete({
       where: {
-        id: like.id
-      }
-    })
+        id: like.id,
+      },
+    });
 
     await prisma.post.update({
       where: {
@@ -83,21 +79,22 @@ export async function likeDislikePost (userId,postId) {
       },
       data: {
         likesCount: {
-          decrement: 1
-        }
-    }})
+          decrement: 1,
+        },
+      },
+    });
 
     return {
-      isLiked: false
-    }
+      isLiked: false,
+    };
   }
 
   await prisma.postLike.create({
     data: {
       userId,
-      postId
-    }
-  })
+      postId,
+    },
+  });
 
   await prisma.post.update({
     where: {
@@ -105,65 +102,74 @@ export async function likeDislikePost (userId,postId) {
     },
     data: {
       likesCount: {
-        increment: 1
-      }
-  }})
+        increment: 1,
+      },
+    },
+  });
 
   return {
-    isLiked: true
-  }
+    isLiked: true,
+  };
 }
 
-export async function createComment(userId , postId , content) {
+export async function createComment(userId, postId, content) {
   return await prisma.comment.create({
     data: {
       userId,
       postId,
-      comment: content
-    }
-  })
+      comment: content,
+    },
+    include: {
+      user: {
+        select: {
+          profileImage: true,
+          username: true,
+        },
+      },
+    },
+  });
 }
 
-export async function getComments(userId,postId,skip=0,take=5) {
+export async function getComments(userId, postId, skip = 0, take = 5) {
   const comments = await prisma.comment.findMany({
     skip,
     take,
-    where:{
-      postId
+    where: {
+      postId,
     },
     include: {
       user: true,
       likes: {
         where: {
-          userId
+          userId,
         },
         select: {
-          userId: true
-        }
-      }
-    }
-  })
+          userId: true,
+        },
+      },
+    },
+  });
 
   return comments.map((comment) => ({
     ...comment,
-    isLiked: comment.likes.length > 0
-  }))
+    isLiked: comment.likes.length > 0,
+  }));
 }
 
-export async function   likeDislikeComment(userId, commentId){
+export async function likeDislikeComment(userId, commentId) {
   const like = await prisma.commentLike.findFirst({
     where: {
       userId,
-      commentId
-    }
-  })
+      commentId,
+    },
+  });
 
-  if(like) {
+  if (like) {
     await prisma.commentLike.delete({
       where: {
-        id: like.id
-      }
-    })
+        id: like.id,
+      },
+    });
 
     await prisma.comment.update({
       where: {
@@ -171,21 +177,22 @@ export async function   likeDislikeComment(userId, commentId){
       },
       data: {
         likesCount: {
-          decrement: 1
-        }
-    }})
+          decrement: 1,
+        },
+      },
+    });
 
     return {
-      isLiked: false
-    }
+      isLiked: false,
+    };
   }
 
   await prisma.commentLike.create({
     data: {
       userId,
-      commentId
-    }
-  })
+      commentId,
+    },
+  });
 
   await prisma.comment.update({
     where: {
@@ -193,11 +200,12 @@ export async function   likeDislikeComment(userId, commentId){
     },
     data: {
       likesCount: {
-        increment: 1
-      }
-  }})
+        increment: 1,
+      },
+    },
+  });
 
   return {
-    isLiked: true
-  }
+    isLiked: true,
+  };
 }
