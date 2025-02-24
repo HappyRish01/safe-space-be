@@ -124,8 +124,10 @@ export async function createComment(userId , postId , content) {
   })
 }
 
-export async function getComments(userId,postId,skip= 0,take=5) {
+export async function getComments(userId,postId,skip=0,take=5) {
   const comments = await prisma.comment.findMany({
+    skip,
+    take,
     where:{
       postId
     },
