@@ -3,7 +3,7 @@ import { setUser } from "../services/auth.js";
 import { compare, hash } from "bcrypt";
 
 export async function handleUserSignupController(req, res) {
-  const { username, password   } = req.body;
+  const { username, password  } = req.body;
   try {
     const exsistingUserByEmail = await prisma.user.findUnique({
       where: {

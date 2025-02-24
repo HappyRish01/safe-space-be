@@ -58,7 +58,7 @@ export async function createPostController(req,res) {
 export async function getPostsController (req, res) {
 
     const userId = req.user.id;
-    const {skip,take} = req.body
+    const {skip,take} = req.query;
     try {
         const posts = await getPosts(userId,skip,take)
         return res.status(200).json({
