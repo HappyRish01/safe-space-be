@@ -37,6 +37,17 @@ router.get("/:id", async (req, res) => {
               username: true,
               profileImage: true,  
             },
+            
+        },
+        comments: {
+          include: {
+            user: {
+              select:{
+                username: true,
+                profileImage: true,
+              }
+            },
+          }
         },
   }});
     if (!post) {

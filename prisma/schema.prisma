@@ -33,6 +33,7 @@ model Post {
   userId     String
   user       User @relation(fields: [userId] , references: [id])
   likesCount Int       @default(0)
+  commentCount Int @default(0)
   likes      PostLike[]
   comments   Comment[]
   communityId String?
@@ -58,6 +59,7 @@ model Comment {
   likesCount Int @default(0)
   likes     CommentLike[]
   @@unique([comment, postId, userId])
+  createdAt DateTime @default(now())
 }
 
 model PostLike {
