@@ -15,7 +15,7 @@ const router = Router()
 router.use("/v1/user" , userRoutes);
 router.use("/v1/post" ,checkForAuthentication, postRoutes);
 router.use("/v1/feeds" , feedRoutes);
-router.use("/v1/community",checkForAuthentication,communityRoutes)
+router.use("/v1/community",communityRoutes)
 router.use("/v1/generate-upload-signature",checkForAuthentication,generateUploadSignature)
 router.use("/v1/save-image",checkForAuthentication,saveImage)
 
