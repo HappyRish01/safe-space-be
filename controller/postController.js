@@ -46,6 +46,7 @@ export async function createPostController(req, res) {
   }
 
   try {
+
     const post = await createPost(userId, content, caption, communityId);
     return res.status(201).json({
       message: "Post created successfully",

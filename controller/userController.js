@@ -3,11 +3,40 @@ import { setUser } from "../services/auth.js";
 import { compare, hash } from "bcrypt";
 
 export async function handleUserSignupController(req, res) {
-  const { username, password  } = req.body;
+  const { username, password } = req.body;
+  try {
+    const response = await fetch(
+      "https://2545-103-225-190-165.ngrok-free.app/api/v1/toxicity",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          msg: username,
+        }),
+      }
+    );
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.toxicity) {
+        return res.status(500).json({
+          message: "Please use Kinder Words for your username",
+        });
+      }
+    } else {
+      throw new Error("some Error Occured");
+    }
+  } catch (e) {
+    return res.status(500).json({
+      message: "some Error Occurred",
+    });
+  }
   try {
     const exsistingUserByEmail = await prisma.user.findUnique({
       where: {
-        username
+        username,
       },
     });
     if (exsistingUserByEmail) {
@@ -38,11 +67,11 @@ export async function handleUserSignupController(req, res) {
 
     const token = setUser(user);
 
-    res.status(201).json({token, message: "User succesfully registered" });
+    res.status(201).json({ token, message: "User succesfully registered" });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Failed to create user"
+      message: "Failed to create user",
     });
   }
 }
@@ -53,7 +82,7 @@ export async function handleUserLoginController(req, res) {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        username
+        username,
       },
     });
     if (!user) {
@@ -67,10 +96,8 @@ export async function handleUserLoginController(req, res) {
     }
     const token = setUser(user);
 
-    res.status(200).json({token})
-    
+    res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({message: "Something went wrong"})
+    res.status(500).json({ message: "Something went wrong" });
   }
 }
-

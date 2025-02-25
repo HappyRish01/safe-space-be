@@ -28,8 +28,8 @@ model User {
 
 model Post {
   id         String    @id @default(uuid())
-  content    String?
-  caption    String?
+  content    String   @default("")
+  caption    String   @default("")
   userId     String
   user       User @relation(fields: [userId] , references: [id])
   likesCount Int       @default(0)
@@ -39,12 +39,14 @@ model Post {
   communityId String?
   community  Community? @relation(fields: [communityId], references: [id])
   createdAt  DateTime  @default(now())
+
   @@unique([content, caption, userId])
 }
 
 model Community {
   id        String   @id @default(uuid())
   name      String
+  description String
   posts     Post[]
   members   User[] @relation("CommunityMembers")
 }
