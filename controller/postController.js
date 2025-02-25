@@ -29,7 +29,7 @@ export async function createPostController(req, res) {
 
   	if (data.toxicity){
   	return res.status(500).json({
-              message: "Please use Kinder Words"
+              message: `Please use Kinder Words your post is ${Math.floor(data.toxicity*100)} `
           })
 
   	}
@@ -116,7 +116,7 @@ export async function createCommentController(req, res) {
   
       if (data.toxicity){
       return res.status(500).json({
-                message: "Please use Kinder Words"
+                message: `Please use Kinder Words your comment is ${Math.floor(data.toxicity*100)} `
             })
   
       }
