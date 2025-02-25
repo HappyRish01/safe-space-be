@@ -10,40 +10,40 @@ import {
 export async function createPostController(req, res) {
   const { communityId, content, caption } = req.body;
   const userId = req.user.id;
-  // 	if (caption){
+  	if (caption){
 
-  // try {
-  //       const response= await fetch('BACKEND_URL', {
-  //         method:"POST",
-  //         headers:{
-  //           "Content-Type": "application/json",
-  //         },
-  //         body:JSON.stringify({
+  try {
+        const response= await fetch('https://2545-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
+          method:"POST",
+          headers:{
+            "Content-Type": "application/json",
+          },
+          body:JSON.stringify({
 
-  //           msg:caption,
+            msg:caption,
 
-  //         })});
-  //       const data=await response.json();
+          })});
+        const data=await response.json();
 
-  //       if (response.ok){
+        if (response.ok){
 
-  // 	if (data.toxicity){
-  // 	return res.status(500).json({
-  //             message: "Please use Kinder Words"
-  //         })
+  	if (data.toxicity){
+  	return res.status(500).json({
+              message: "Please use Kinder Words"
+          })
 
-  // 	}
-  //       }else{
-  //         throw new Error('some Error Occured');
-  //       }
+  	}
+        }else{
+          throw new Error('some Error Occured');
+        }
 
-  //     } catch (e) {
-  // 	return res.status(500).json({
-  //             message: "some Error Occurred"
-  //         })
+      } catch (e) {
+  	return res.status(500).json({
+              message: "some Error Occurred"
+          })
 
-  //     }
-  // }
+      }
+  }
 
   try {
     const post = await createPost(userId, content, caption, communityId);
@@ -96,7 +96,40 @@ export async function likeDislikePostController(req, res) {
 export async function createCommentController(req, res) {
   const { content, postId } = req.body;
   const userId = req.user.id;
+  if (content){
 
+    try {
+          const response= await fetch('https://2545-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
+            method:"POST",
+            headers:{
+              "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+  
+              msg:content,
+  
+            })});
+          const data=await response.json();
+  
+          if (response.ok){
+  
+      if (data.toxicity){
+      return res.status(500).json({
+                message: "Please use Kinder Words"
+            })
+  
+      }
+          }else{
+            throw new Error('some Error Occured');
+          }
+  
+        } catch (e) {
+      return res.status(500).json({
+                message: "some Error Occurred"
+            })
+  
+        }
+    }
   try {
     const comment = await createComment(userId, postId, content);
     res.status(200).json({
