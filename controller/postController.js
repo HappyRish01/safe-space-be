@@ -13,7 +13,7 @@ export async function createPostController(req, res) {
   	if (caption){
 
   try {
-        const response= await fetch('https://2545-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
+        const response= await fetch('https://a506-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
           method:"POST",
           headers:{
             "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export async function createCommentController(req, res) {
   if (content){
 
     try {
-          const response= await fetch('https://2545-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
+          const response= await fetch('https://a506-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
             method:"POST",
             headers:{
               "Content-Type": "application/json",
