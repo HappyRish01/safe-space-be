@@ -113,7 +113,8 @@ export async function likeDislikePost(userId, postId) {
 }
 
 export async function createComment(userId, postId, content) {
-  return await prisma.comment.create({
+  
+  const comment =  await prisma.comment.create({
     data: {
       userId,
       postId,
@@ -128,6 +129,18 @@ export async function createComment(userId, postId, content) {
       },
     },
   });
+
+  await prisma.post.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      commentsCount: {
+        increment: 1,
+      },
+    },
+  });
+  return comment
 }
 
 export async function getComments(userId, postId, skip = 0, take = 5) {
