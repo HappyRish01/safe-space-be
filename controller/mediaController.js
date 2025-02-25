@@ -34,6 +34,7 @@ export function generateUploadSignature(req,res){
         timestamp,
         folder,
         public_id: publicId, 
+        moderation: "webpurify",
       },
       process.env.CLOUDINARY_API_SECRET
     );
