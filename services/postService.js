@@ -129,17 +129,23 @@ export async function createComment(userId, postId, content) {
       },
     },
   });
+  try{
 
-  await prisma.post.update({
-    where: {
-      id: postId,
-    },
-    data: {
-      commentsCount: {
-        increment: 1,
+    
+    await prisma.post.update({
+      where: {
+        id: postId,
       },
-    },
-  });
+      data: {
+        commentCount: {
+          increment: 1,
+        },
+      },
+    });
+  }
+  catch(e){
+    console.log(e)
+  }
   return comment
 }
 
