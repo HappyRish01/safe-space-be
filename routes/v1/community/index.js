@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../../../libs/prisma.js";
-
+import {checkForAuthentication} from "../../../middlewares/auth.js";
 const router = Router();
 
 //Get all communities
@@ -13,10 +13,58 @@ router.get("/communities", async (req, res) => {
   }
 });
 
-// Get all posts of a community
+
+// Get all posts of A community (loggedout)
+router.get("/:id/feeds", async (req, res) => {
+  const { id } = req.params;
+  let { skip , take } = req.query;
+  skip = parseInt(skip) || 0;
+  take = parseInt(take) || 15;
+  try {
+    const posts = await prisma.post.findMany({
+      skip,
+      take,
+      where: {
+        communityId: id,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+            profileImage: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc", // Sorting baby
+      },
+    });
+    // if (!posts) {
+    //   return res.status(404).json({ error: "Post not found" });
+    // }
+
+    res.status(200).json(
+    {posts: posts.map((post) => {
+        const { likes, ...rest } = post; // Destructure `likes` and keep the rest of the post data
+        return {
+          ...rest,
+          isLiked: false, // Add `isLiked` flag
+        };
+      })}
+    );
+
+    //   res.status(200).json(posts);
+  } catch (e) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Get all posts of a community (loggedin)
 router.get("/:id/posts", async (req, res) => {
   const { id } = req.params;
-  const { skip = 0, take = 15 } = req.query;
+  let { skip , take } = req.query;
+  skip = parseInt(skip) || 0;
+  take = parseInt(take) || 15;
 
   const userId = req.user?.id;
   try {
@@ -46,25 +94,25 @@ router.get("/:id/posts", async (req, res) => {
         createdAt: "desc", // Sorting baby
       },
     });
-    if (!posts) {
-      return res.status(404).json({ error: "Post not found" });
-    }
+    // if (!posts) {
+    //   return res.status(404).json({ error: "Post not found" });
+    // }
 
     res.status(200).json(
-      posts.map((post) => {
+    {posts: posts.map((post) => {
         const { likes, ...rest } = post; // Destructure `likes` and keep the rest of the post data
         return {
           ...rest,
           isLiked: likes.length > 0, // Add `isLiked` flag
         };
-      })
+      })}
     );
 
     //   res.status(200).json(posts);
   } catch (e) {
     res.status(500).json({ error: "Something went wrong" });
   }
-});
+},checkForAuthentication);
 
 router.post("/post", async (req, res) => {
   const userId = req.user.id;
