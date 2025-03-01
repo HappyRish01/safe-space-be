@@ -60,7 +60,7 @@ router.get("/:id/feeds", async (req, res) => {
 });
 
 // Get all posts of a community (loggedin)
-router.get("/:id/posts", async (req, res) => {
+router.get("/:id/posts", checkForAuthentication,async (req, res) => {
   const { id } = req.params;
   let { skip , take } = req.query;
   skip = parseInt(skip) || 0;
@@ -112,9 +112,9 @@ router.get("/:id/posts", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: "Something went wrong" });
   }
-},checkForAuthentication);
+});
 
-router.post("/post", async (req, res) => {
+router.post("/post",checkForAuthentication, async (req, res) => {
   const userId = req.user.id;
   const { communityId, content, caption } = req.body;
 
@@ -140,7 +140,7 @@ router.post("/post", async (req, res) => {
 });
 
 // join a community
-router.post("/:communityId/join", async (req, res) => {
+router.post("/:communityId/join",checkForAuthentication, async (req, res) => {
   const userId = req.user.id;
 
   const { communityId } = req.params;
@@ -189,7 +189,7 @@ router.post("/:communityId/join", async (req, res) => {
 });
 
 // leave a community
-router.post("/:communityId/leave", async (req, res) => {
+router.post("/:communityId/leave",checkForAuthentication, async (req, res) => {
   const userId = req.user.id;
   const{communityId} = req.params;
 
@@ -217,7 +217,7 @@ router.post("/:communityId/leave", async (req, res) => {
 })
 
 //get all communites a user has joined
-router.get("/:userId/joined", async (req, res) => {
+router.get("/:userId/joined",checkForAuthentication, async (req, res) => {
   const { userId } = req.params;
 
   try{
