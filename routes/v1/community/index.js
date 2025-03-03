@@ -60,7 +60,7 @@ router.get("/:id/feeds", async (req, res) => {
 });
 
 // Get all posts of a community (loggedin)
-router.get("/:id/posts", checkForAuthentication,async (req, res) => {
+router.get("/:id/posts", checkForAuthentication ,async (req, res) => {
   const { id } = req.params;
   let { skip , take } = req.query;
   skip = parseInt(skip) || 0;
@@ -114,6 +114,8 @@ router.get("/:id/posts", checkForAuthentication,async (req, res) => {
   }
 });
 
+
+//Create a community with a post
 router.post("/post",checkForAuthentication, async (req, res) => {
   const userId = req.user.id;
   const { communityId, content, caption } = req.body;
@@ -235,7 +237,6 @@ router.get("/:userId/joined",checkForAuthentication, async (req, res) => {
         message: "User not found",
       });
     }
-
     res.json(user.communities);
   }
   catch(e){

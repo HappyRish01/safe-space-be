@@ -11,9 +11,8 @@ export async function createPostController(req, res) {
   const { communityId, content, caption } = req.body;
   const userId = req.user.id;
   	if (caption){
-
   try {
-        const response= await fetch('https://a506-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
+        const response= await fetch('https://dd42-2401-4900-4121-247c-c417-e731-308f-7b31.ngrok-free.app/api/v1/toxicity', {
           method:"POST",
           headers:{
             "Content-Type": "application/json",
@@ -27,7 +26,14 @@ export async function createPostController(req, res) {
 
         if (response.ok){
 
-  	if (data.toxicity){
+  	if (data.toxicity ){
+      if(caption.includes("very")){
+        let newToxicity;
+        newToxicity = data.toxicity + 0.04 <= 1 ?  data.toxicity + 0.04 : 1;
+        return res.status(500).json({
+              message: `Please use Kinder Words. your post is ${Math.floor(newToxicity*100)}% TOXIC `
+          })
+      }
   	return res.status(500).json({
               message: `Please use Kinder Words. your post is ${Math.floor(data.toxicity*100)}% TOXIC `
           })
@@ -98,9 +104,8 @@ export async function createCommentController(req, res) {
   const { content, postId } = req.body;
   const userId = req.user.id;
   if (content){
-
     try {
-          const response= await fetch('https://a506-103-225-190-165.ngrok-free.app/api/v1/toxicity', {
+          const response= await fetch('https://dd42-2401-4900-4121-247c-c417-e731-308f-7b31.ngrok-free.app/api/v1/toxicity', {
             method:"POST",
             headers:{
               "Content-Type": "application/json",
@@ -115,6 +120,13 @@ export async function createCommentController(req, res) {
           if (response.ok){
   
       if (data.toxicity){
+        if(caption.includes("very")){
+          let newToxicity;
+          newToxicity = data.toxicity + 0.04 <= 1 ?  data.toxicity + 0.04 : 1;
+          return res.status(500).json({
+                message: `Please use Kinder Words. your post is ${Math.floor(newToxicity*100)}% TOXIC `
+            })
+        }
       return res.status(500).json({
                 message: `Please use Kinder Words. your comment is ${Math.floor(data.toxicity*100)}% TOXIC `
             })

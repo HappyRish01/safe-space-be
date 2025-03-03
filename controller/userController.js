@@ -6,7 +6,7 @@ export async function handleUserSignupController(req, res) {
   const { username, password } = req.body;
   try {
     const response = await fetch(
-      "https://a506-103-225-190-165.ngrok-free.app/api/v1/toxicity",
+      "https://dd42-2401-4900-4121-247c-c417-e731-308f-7b31.ngrok-free.app/api/v1/toxicity",
       {
         method: "POST",
         headers: {
