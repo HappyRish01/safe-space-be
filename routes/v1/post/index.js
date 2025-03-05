@@ -96,4 +96,38 @@ router.post("/comments", getCommentController);
 
 router.post("/like-comment", likeDislikeCommentController);
 
+router.post("/whisper" , async (req,res) => {
+  //from id
+  const userId = req.user.id;
+  const {toId,comment,postId} = req.body;
+  if(!toId || !comment){
+    return res.status(400).json({
+      message: "Missing fields"
+    })
+  }
+  try{
+    console.log(userId,"u",toId,"t",comment,"c",postId,"p")
+
+    const whishper = await prisma.whishper.create({
+      data: {
+        fromId: userId,
+        toId,
+        comment,
+        postId
+      }
+    })
+
+   
+    
+    return res.status(200).json(whishper)
+  }
+  catch(e){
+    return res.status(500).json({
+      message: "Failed to create whishper",
+      e: e.message,
+      error: e
+    })
+  }
+})
+
 export default router;

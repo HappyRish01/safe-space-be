@@ -39,7 +39,6 @@ model Post {
   communityId String?
   community  Community? @relation(fields: [communityId], references: [id])
   createdAt  DateTime  @default(now())
-
   @@unique([content, caption, userId])
 }
 
